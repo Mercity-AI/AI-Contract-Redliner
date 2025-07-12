@@ -1,19 +1,37 @@
-import os
-from openai import OpenAI
+import json
+from utils import call_model
 from PROMPTS import SYSTEM_PROMPT, USER_PROMPT
-client = OpenAI(api_key=os.getenv("OPENROUTER_API_KEY"), base_url="https://openrouter.ai/api/v1")
+from rich import print
 
 
 
-MODEL = "moonshotai/kimi-k2"
+MODEL = "deepseek/deepseek-r1-0528"
 
 
 
-
-response = client.chat.completions.create(
-    model=MODEL,
-    messages=[
+def redline(preferences, contract):
+    """
+    Redline the contract based on user preferences.
+    """
+    messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": USER_PROMPT},
-    ],
-)
+        {"role": "user", "content": USER_PROMPT.format(preferences=preferences, contract=contract)},
+    ]
+    response = call_model(MODEL, messages)
+    try:
+        return json.loads(response)
+    except json.JSONDecodeError:
+        return response
+
+
+if __name__ == "__main__":
+    preferences = "I prefer short term contracts under 1 year, and no non-compete clauses."
+
+    with open("contract.txt", "r") as f:
+        contract = f.read()
+
+    result = redline(preferences, contract)
+    print(result)
+
+    with open("redlined_contract.txt", "w") as f:
+        f.write(json.dumps(result, indent=4))

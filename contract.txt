@@ -1,0 +1,88 @@
+# MUTUAL NON-DISCLOSURE AGREEMENT
+
+**CONFIDENTIAL BUSINESS RELATIONSHIP AGREEMENT**
+
+This Confidential Business Relationship Agreement ("Agreement") is entered into on _____________, 2025, between [Company Name], a corporation ("Company") and _________________ ("Recipient").
+
+## 1. PURPOSE AND SCOPE
+
+The parties wish to explore potential business opportunities and may disclose confidential information to each other. This Agreement governs all such disclosures and related business activities.
+
+## 2. DEFINITION OF CONFIDENTIAL INFORMATION
+
+"Confidential Information" means any and all information, data, materials, methods, techniques, processes, practices, formulas, instructions, sketches, drawings, designs, blueprints, models, samples, flow charts, data, computer programs, disks, diskettes, tapes, devices, business plans, customer lists, financial information, sales and marketing plans, personnel information, or other business information disclosed by either party, whether orally, in writing, or in any other form, and whether or not marked as confidential. Confidential Information also includes any information disclosed by third parties to either party under confidentiality obligations, any derivatives of Confidential Information, and any information that Recipient learns about Company's business operations, competitive position, or future plans during the relationship.
+
+## 3. OBLIGATIONS AND RESTRICTIONS
+
+### 3.1 Non-Disclosure
+Recipient agrees to hold all Confidential Information in strict confidence and not to disclose such information to any third party without Company's prior written consent.
+
+### 3.2 Non-Competition and Business Restrictions
+During the term of this Agreement and for a period of **five (5) years** thereafter, Recipient agrees not to:
+- Engage in any business competitive with Company's current or planned business activities
+- Solicit, hire, or attempt to hire any employees, contractors, or consultants of Company
+- Directly or indirectly compete with Company in any geographic market where Company operates or plans to operate
+- Develop, market, or sell any products or services that are similar to or competitive with Company's offerings
+
+### 3.3 Permitted Use
+Confidential Information may only be used for the specific purpose of evaluating potential business relationships as determined solely by Company.
+
+## 4. TERM AND SURVIVAL
+
+This Agreement shall remain in effect for an initial term of **three (3) years** from the date of execution, and shall automatically renew for successive **two (2) year** periods unless terminated by either party with ninety (90) days written notice. All obligations under this Agreement shall survive termination and continue for an additional **seven (7) years** after expiration or termination of this Agreement.
+
+## 5. EQUITABLE RELIEF AND REMEDIES
+
+Recipient acknowledges that any breach of this Agreement would cause irreparable harm to Company. Therefore, Company shall be entitled to seek immediate injunctive relief and specific performance without posting bond, in addition to all other remedies available at law or equity. Recipient waives any right to jury trial in connection with any dispute arising under this Agreement.
+
+## 6. ASSIGNMENT AND BINDING EFFECT
+
+This Agreement shall be binding upon Recipient's heirs, successors, assigns, and affiliated entities. Company may assign this Agreement without consent. Any attempted assignment by Recipient shall be void unless Company provides prior written approval.
+
+## 7. BROAD INTERPRETATION
+
+### 7.1 Scope of Activities
+The restrictions in this Agreement apply to all business activities, whether conducted personally, through family members, business associates, or any entity in which Recipient has any interest whatsoever.
+
+### 7.2 Geographic Scope
+The geographic restrictions apply globally, including all territories where Company has business interests or may reasonably expand in the future.
+
+## 8. GOVERNING LAW AND JURISDICTION
+
+This Agreement shall be governed by the laws of Delaware, without regard to conflict of law principles. Any disputes must be resolved exclusively in the state courts of New Castle County, Delaware, and Recipient consents to personal jurisdiction in such courts regardless of Recipient's residence or business location.
+
+## 9. ADDITIONAL OBLIGATIONS
+
+### 9.1 Reporting Requirements
+Recipient agrees to provide quarterly reports to Company regarding any business activities that might potentially relate to Company's business interests.
+
+### 9.2 Notification of Opportunities
+Recipient must immediately notify Company of any business opportunities that come to Recipient's attention that might be of interest to Company, and Recipient assigns all rights in such opportunities to Company.
+
+## 10. MODIFICATION AND WAIVER
+
+This Agreement may only be modified by written instrument signed by Company. No waiver by Company shall be deemed a waiver of any other breach or default.
+
+## 11. SEVERABILITY
+
+If any provision is deemed unenforceable, the remaining provisions shall remain in full force and effect, and the unenforceable provision shall be modified to the minimum extent necessary to make it enforceable while preserving Company's intended benefits.
+
+## 12. ENTIRE AGREEMENT
+
+This Agreement represents the complete understanding between the parties and supersedes all prior negotiations, representations, or agreements relating to the subject matter hereof.
+
+---
+
+**COMPANY:**                           **RECIPIENT:**
+
+By: _________________________         By: _________________________
+
+Name: _______________________          Name: _______________________
+
+Title: ______________________         
+
+Date: _______________________          Date: _______________________
+
+---
+
+*This document is for testing legal review systems and should not be used for actual business purposes.*
