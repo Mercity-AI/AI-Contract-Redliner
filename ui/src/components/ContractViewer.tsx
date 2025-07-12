@@ -68,19 +68,19 @@ export const ContractViewer = forwardRef<ContractViewerRef, ContractViewerProps>
   };
 
   const getSeverityColor = (severity: number, isAccepted: boolean, isRejected: boolean) => {
-    // For rejected items, only dim the background, not the text
-    const bgOpacity = isRejected ? 'bg-opacity-60 border-opacity-60' : '';
+    // For rejected items, reduce overall opacity
+    const opacity = isRejected ? 'opacity-50' : '';
     
-    if (isAccepted) return `bg-green-100 border border-green-500 text-green-900 ${bgOpacity}`;
-    if (isRejected) return `bg-red-100 border border-red-500 text-red-900 ${bgOpacity}`;
+    if (isAccepted) return `bg-green-100 border border-green-500 text-green-900 ${opacity}`;
+    if (isRejected) return `bg-red-100 border border-red-500 text-red-900 ${opacity}`;
     
     switch (severity) {
-      case 5: return `bg-red-50 border border-red-300 text-red-800 ${bgOpacity}`;
-      case 4: return `bg-orange-50 border border-orange-300 text-orange-800 ${bgOpacity}`;
-      case 3: return `bg-yellow-50 border border-yellow-300 text-yellow-800 ${bgOpacity}`;
-      case 2: return `bg-blue-50 border border-blue-300 text-blue-800 ${bgOpacity}`;
-      case 1: return `bg-gray-50 border border-gray-300 text-gray-800 ${bgOpacity}`;
-      default: return `bg-gray-50 border border-gray-300 text-gray-800 ${bgOpacity}`;
+      case 5: return `bg-red-50 border border-red-300 text-red-800 ${opacity}`;
+      case 4: return `bg-orange-50 border border-orange-300 text-orange-800 ${opacity}`;
+      case 3: return `bg-yellow-50 border border-yellow-300 text-yellow-800 ${opacity}`;
+      case 2: return `bg-blue-50 border border-blue-300 text-blue-800 ${opacity}`;
+      case 1: return `bg-gray-50 border border-gray-300 text-gray-800 ${opacity}`;
+      default: return `bg-gray-50 border border-gray-300 text-gray-800 ${opacity}`;
     }
   };
 
@@ -193,17 +193,11 @@ export const ContractViewer = forwardRef<ContractViewerRef, ContractViewerProps>
   return (
     <Card className="h-full">
       <CardContent className="p-6 h-full">
-        <div className="mb-4 flex items-center gap-2">
-          <h3 className="text-lg font-semibold">Contract Document</h3>
-          <Badge variant="outline" className="text-xs">
-            <Info className="mr-1 h-3 w-3" />
-            Click highlights to view details in sidebar
-          </Badge>
-        </div>
         
         <div ref={containerRef} className="h-full overflow-y-auto overflow-x-hidden">
           <div 
-            className="prose max-w-none text-sm leading-7 p-4"
+            className="prose max-w-none text-sm p-4"
+            style={{ fontFamily: 'Arial, sans-serif', lineHeight: '1.4' }}
             dangerouslySetInnerHTML={{ __html: processContractWithHighlights() }}
             onClick={handleMarkClick}
             onMouseOver={handleMarkHover}

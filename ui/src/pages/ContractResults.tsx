@@ -113,9 +113,8 @@ const ContractResults = () => {
           <AlertTriangle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
           <h2 className="text-xl font-semibold mb-2">No Contract Data Found</h2>
           <p className="text-muted-foreground mb-4">Please start by analyzing a contract first.</p>
-          <Button onClick={() => navigate('/')}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Input
+          <Button size="sm" onClick={() => navigate('/')}>
+            <ArrowLeft className="h-4 w-4" />
           </Button>
         </div>
       </div>
@@ -129,9 +128,8 @@ const ContractResults = () => {
         <div className="max-w-full mx-auto p-4 pr-16">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Button variant="outline" onClick={() => navigate('/')}>
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Input
+              <Button variant="outline" size="sm" onClick={() => navigate('/')}>
+                <ArrowLeft className="h-4 w-4" />
               </Button>
               <div>
                 <h1 className="text-2xl font-bold">Contract Analysis Results</h1>
