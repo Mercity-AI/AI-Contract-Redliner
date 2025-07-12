@@ -1,32 +1,24 @@
 [
     {
-        "Issue_name": "Extended Contract Term",
+        "issue_name": "Long Term",
         "line_range": {
             "start": "This Agreement shall remain",
-            "end": "expiration or termination of this Agreement.",
-            "severity": 5
+            "end": "termination of this Agreement"
         },
-        "issue_description": "The agreement has an initial term of 3 years with automatic 2-year renewals and obligations surviving for an additional 7 years after termination, which far exceeds the user's preference for short-term contracts under 1 year.",
-        "issue_fix": "Revise Section 4 to limit the term to a maximum of 11 months without automatic renewal, and remove or reduce the survival period to align with a short-term preference."
+        "severity": 5,
+        "issue_description": "Contract term exceeds user's preference for agreements under 1 year with 3-year initial term and automatic 2-year renewals.",
+        "issue_fix": "Shorten initial term to under 1 year and remove automatic renewals.",
+        "replace_with": "This Agreement shall remain in effect for an initial term of six (6) months from the date of execution. All obligations under this Agreement shall survive termination and continue for an additional two (2) years after expiration or termination of this Agreement."
     },
     {
-        "Issue_name": "Non-Compete Clause",
+        "issue_name": "Non-Compete Clause",
         "line_range": {
-            "start": "During the term of",
-            "end": "competitive with Company's offerings",
-            "severity": 5
+            "start": "### 3.2 Non-Competition and Business Restrictions",
+            "end": "competitive with Company's offerings"
         },
-        "issue_description": "Section 3.2 includes a broad non-competition restriction lasting the term plus 5 years, prohibiting competitive activities, solicitation of employees, and development of similar products, directly conflicting with the user's preference for no non-compete clauses.",
-        "issue_fix": "Delete Section 3.2 in its entirety to remove all non-compete and related restrictions."
-    },
-    {
-        "Issue_name": "Broad Restriction Scope",
-        "line_range": {
-            "start": "The restrictions in this",
-            "end": "may reasonably expand in the future.",
-            "severity": 4
-        },
-        "issue_description": "Section 7 expands the non-compete restrictions to apply globally and through any associated entities, amplifying the non-compete clause which the user prefers to avoid entirely.",
-        "issue_fix": "Remove Section 7 or, if retaining non-disclosure elements, excise all references to non-compete scope to comply with no non-compete preference."
+        "severity": 5,
+        "issue_description": "Section imposes a 5-year non-compete restriction after termination, conflicting with user's 'no non-compete' preference.",
+        "issue_fix": "Remove entire non-compete section.",
+        "replace_with": ""
     }
 ]
