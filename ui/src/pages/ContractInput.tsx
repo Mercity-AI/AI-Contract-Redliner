@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { FileText, Settings, ArrowRight } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { FileText, Settings, ArrowRight, Wifi, WifiOff } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const ContractInput = () => {
@@ -20,7 +21,7 @@ Contractor agrees to provide consulting services as described in Exhibit A.
 Company shall be liable for any and all damages arising from this agreement, including but not limited to direct, indirect, consequential, and punitive damages.
 
 3. TERMINATION
-Either party may terminate this agreement with reasonable notice to the other party.
+This agreement may be terminated by either party with ninety (90) days written notice.
 
 4. INTELLECTUAL PROPERTY
 All work product, including intellectual property rights, belongs to Company upon creation.
@@ -31,10 +32,44 @@ Company agrees to pay Contractor the fees specified in Exhibit B.
 6. CONFIDENTIALITY
 Both parties agree to maintain confidentiality of proprietary information.
 
+7. SURVIVAL
+All obligations under this Agreement shall survive and continue for seven (7) years after expiration or termination of this Agreement.
+
+8. ASSIGNMENT
+Company may assign this Agreement to any third party without prior written approval.
+
+9. NON-COMPETE
+For a period of five (5) years after termination, Contractor shall not compete with Company's offerings in any market.
+
+10. REMEDIES
+Company shall be entitled to injunctive relief and all other remedies available at law or equity.
+
+11. CONFIDENTIALITY
+"Confidential Information" means any and all information, data, materials, methods, techniques, processes, practices, formulas, instructions, sketches, drawings, designs, blueprints, models, samples, flow charts, data, computer programs, disks, diskettes, tapes, devices, business plans, customer lists, financial information, sales and marketing plans, personnel information, or other business information disclosed by either party, whether orally, in writing, or in any other form, and whether or not marked as confidential. Confidential Information also includes any information disclosed by third parties to either party under confidentiality obligations, any derivatives of Confidential Information, and any information that Recipient learns about Company's business operations, competitive position, or future plans during the relationship.
+
+12. OPPORTUNITY ASSIGNMENT
+Recipient must immediately notify Company of any business opportunities and assign all rights to Company.
+
 This agreement shall be governed by the laws of [STATE].`);
   const [isLoading, setIsLoading] = useState(false);
+  const [apiStatus, setApiStatus] = useState<'checking' | 'connected' | 'disconnected'>('checking');
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  useEffect(() => {
+    const checkApiHealth = async () => {
+      try {
+        const { healthCheck } = await import('@/lib/apiService');
+        await healthCheck();
+        setApiStatus('connected');
+      } catch (error) {
+        setApiStatus('disconnected');
+        console.warn('API health check failed:', error);
+      }
+    };
+
+    checkApiHealth();
+  }, []);
 
   const handleSubmit = async () => {
     if (!preferences.trim() || !contract.trim()) {
@@ -49,22 +84,29 @@ This agreement shall be governed by the laws of [STATE].`);
     setIsLoading(true);
     
     try {
-      // Using mock API for demo - replace with actual API endpoint
-      const { findIssuesInContract } = await import('@/lib/mockApi');
-      const redlineData = findIssuesInContract(contract, preferences);
+      // Call the real API endpoint
+      const { analyzeContract } = await import('@/lib/apiService');
+      const response = await analyzeContract(preferences, contract);
       
       // Store data in sessionStorage for the results page
       sessionStorage.setItem('contractData', JSON.stringify({
         originalContract: contract,
         preferences,
-        issues: redlineData,
+        issues: response.issues,
+        summary: response.summary,
       }));
+
+      toast({
+        title: "Analysis Complete",
+        description: `Found ${response.issues.length} issues in your contract.`,
+      });
 
       navigate('/results');
     } catch (error) {
+      console.error('Contract analysis error:', error);
       toast({
         title: "Processing Error",
-        description: "Failed to process the contract. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to process the contract. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -76,7 +118,18 @@ This agreement shall be governed by the laws of [STATE].`);
     <div className="min-h-screen bg-background p-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">Contract Redlining Tool</h1>
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <h1 className="text-4xl font-bold text-foreground">Contract Redlining Tool</h1>
+            <Badge 
+              variant={apiStatus === 'connected' ? 'default' : apiStatus === 'disconnected' ? 'destructive' : 'secondary'}
+              className="ml-2"
+            >
+              {apiStatus === 'connected' && <Wifi className="h-3 w-3 mr-1" />}
+              {apiStatus === 'disconnected' && <WifiOff className="h-3 w-3 mr-1" />}
+              {apiStatus === 'checking' ? 'Checking API...' : 
+               apiStatus === 'connected' ? 'API Connected' : 'API Disconnected'}
+            </Badge>
+          </div>
           <p className="text-muted-foreground text-lg">
             Analyze contracts against your preferences and get detailed redlining suggestions
           </p>
@@ -138,7 +191,7 @@ This agreement shall be governed by the laws of [STATE].`);
         <div className="mt-8 text-center">
           <Button
             onClick={handleSubmit}
-            disabled={isLoading || !preferences.trim() || !contract.trim()}
+            disabled={isLoading || !preferences.trim() || !contract.trim() || apiStatus === 'disconnected'}
             size="lg"
             className="min-w-[200px]"
           >
@@ -151,6 +204,11 @@ This agreement shall be governed by the laws of [STATE].`);
               </>
             )}
           </Button>
+          {apiStatus === 'disconnected' && (
+            <p className="text-sm text-red-600 mt-2">
+              Cannot analyze contract - API is disconnected. Please ensure the backend server is running.
+            </p>
+          )}
         </div>
       </div>
     </div>

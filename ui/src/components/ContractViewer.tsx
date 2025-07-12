@@ -48,22 +48,58 @@ export const ContractViewer = forwardRef<ContractViewerRef, ContractViewerProps>
   }));
 
   const findTextRanges = (text: string, startWords: string, endWords: string) => {
-    // Simple case-insensitive search that handles overlapping scenarios
+    // First try exact matching (original logic)
     const lowerText = text.toLowerCase();
     const lowerStart = startWords.toLowerCase();
     const lowerEnd = endWords.toLowerCase();
     
-    const startIndex = lowerText.indexOf(lowerStart);
-    if (startIndex === -1) return null;
+    let startIndex = lowerText.indexOf(lowerStart);
+    if (startIndex !== -1) {
+      const endIndex = lowerText.indexOf(lowerEnd, startIndex);
+      if (endIndex !== -1) {
+        return {
+          start: startIndex,
+          end: endIndex + endWords.length,
+        };
+      }
+    }
 
-    // Start searching for end phrase from the beginning of start phrase
-    // This handles cases where phrases might overlap or be adjacent
-    const endIndex = lowerText.indexOf(lowerEnd, startIndex);
-    if (endIndex === -1) return null;
+    // If exact match fails, try flexible regex-based matching
+    const escapeRegex = (str: string) => {
+      return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    };
+
+    const createFlexiblePattern = (phrase: string) => {
+      // Split phrase into words and escape them
+      const words = phrase.trim().split(/\s+/).map(word => escapeRegex(word));
+      
+      // Join words with very limited flexible spacing (only whitespace and basic punctuation)
+      return words.join('\\s*[\\s.,;:!?()\\[\\]\\-*"\']*\\s*');
+    };
+
+    const flexibleStartPattern = createFlexiblePattern(startWords);
+    const flexibleEndPattern = createFlexiblePattern(endWords);
+
+    // Try to find start with flexible pattern
+    const startRegex = new RegExp(flexibleStartPattern, 'i');
+    const startMatch = text.match(startRegex);
+    
+    if (!startMatch) return null;
+
+    const flexibleStartIndex = startMatch.index!;
+    
+    // Search for end pattern from start position
+    const textFromStart = text.slice(flexibleStartIndex);
+    const endRegex = new RegExp(flexibleEndPattern, 'i');
+    const endMatch = textFromStart.match(endRegex);
+    
+    if (!endMatch) return null;
+
+    const flexibleEndIndex = flexibleStartIndex + endMatch.index! + endMatch[0].length;
 
     return {
-      start: startIndex,
-      end: endIndex + endWords.length,
+      start: flexibleStartIndex,
+      end: flexibleEndIndex,
     };
   };
 
@@ -85,33 +121,7 @@ export const ContractViewer = forwardRef<ContractViewerRef, ContractViewerProps>
   };
 
   const processContractWithHighlights = () => {
-    // First, process the contract text with markdown
-    const markdownProcessedLines = contract.split('\n').map(line => {
-      // Handle headers
-      if (line.startsWith('# ')) {
-        return `<h1 class="text-2xl font-bold mb-4">${line.slice(2)}</h1>`;
-      } else if (line.startsWith('## ')) {
-        return `<h2 class="text-xl font-semibold mb-3">${line.slice(3)}</h2>`;
-      } else if (line.startsWith('### ')) {
-        return `<h3 class="text-lg font-medium mb-2">${line.slice(4)}</h3>`;
-      }
-      
-      // Handle bold text
-      line = line.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>');
-      
-      // Handle italic text
-      line = line.replace(/\*(.*?)\*/g, '<em class="italic">$1</em>');
-      
-      // Return paragraph or empty line
-      if (line.trim() === '') {
-        return '<br>';
-      } else {
-        return `<p class="mb-2">${line}</p>`;
-      }
-    });
-    
-    let processedContract = markdownProcessedLines.join('');
-
+    // First, find all highlight ranges in the original text
     const highlights: Array<{
       start: number;
       end: number;
@@ -119,7 +129,6 @@ export const ContractViewer = forwardRef<ContractViewerRef, ContractViewerProps>
       issue: RedlineIssue;
     }> = [];
 
-    // Find all issue ranges in the original contract text (before markdown processing)
     issues.forEach((issue, index) => {
       const range = findTextRanges(contract, issue.line_range.start, issue.line_range.end);
       if (range) {
@@ -132,29 +141,87 @@ export const ContractViewer = forwardRef<ContractViewerRef, ContractViewerProps>
       }
     });
 
-    // Sort highlights by start position (reverse order for processing)
-    highlights.sort((a, b) => b.start - a.start);
+    // Remove overlapping highlights - keep the first one found
+    const nonOverlappingHighlights = [];
+    highlights.sort((a, b) => a.start - b.start); // Sort by start position
+    
+    for (const highlight of highlights) {
+      const hasOverlap = nonOverlappingHighlights.some(existing => 
+        (highlight.start >= existing.start && highlight.start < existing.end) ||
+        (highlight.end > existing.start && highlight.end <= existing.end) ||
+        (highlight.start <= existing.start && highlight.end >= existing.end)
+      );
+      
+      if (!hasOverlap) {
+        nonOverlappingHighlights.push(highlight);
+      }
+    }
 
-    // Process highlights from end to start to maintain correct positions
-    highlights.forEach((highlight) => {
+    // Sort highlights by start position (reverse order for processing)
+    nonOverlappingHighlights.sort((a, b) => b.start - a.start);
+
+    // Apply highlights to the original text using placeholder markers
+    let textWithPlaceholders = contract;
+    const placeholderMap = new Map<string, string>();
+
+    nonOverlappingHighlights.forEach((highlight) => {
       const isAccepted = acceptedIssues.has(highlight.issueIndex);
       const isRejected = rejectedIssues.has(highlight.issueIndex);
       const isSelected = selectedIssue === highlight.issueIndex;
 
       const originalText = contract.slice(highlight.start, highlight.end);
-      // Always show original text for rejected, replacement text for accepted
-      const displayText = isAccepted ? highlight.issue.replace_with : originalText;
+      // Always show original text to preserve formatting - replacement text only in sidebar
+      const displayText = originalText;
       
+      // Create unique placeholder
+      const placeholderId = `__HIGHLIGHT_${highlight.issueIndex}__`;
+      
+      // Store the actual HTML element for this placeholder
       const markElement = `<mark 
         class="highlight-mark cursor-pointer px-2 py-1 rounded-md transition-all duration-200 font-medium ${getSeverityColor(highlight.issue.severity, isAccepted, isRejected)} ${isSelected ? 'ring-2 ring-primary ring-offset-1' : ''}"
         data-issue-index="${highlight.issueIndex}"
         data-tooltip="${highlight.issue.issue_name}"
+        style="white-space: pre-wrap; line-height: inherit;"
       >${displayText}</mark>`;
+      
+      placeholderMap.set(placeholderId, markElement);
 
-      // Find and replace the original text in the processed markdown
-      const escapedOriginalText = originalText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const regex = new RegExp(escapedOriginalText, 'g');
-      processedContract = processedContract.replace(regex, markElement);
+      // Replace the original text with placeholder (no offset needed since no overlaps)
+      const beforeText = textWithPlaceholders.slice(0, highlight.start);
+      const afterText = textWithPlaceholders.slice(highlight.end);
+      textWithPlaceholders = beforeText + placeholderId + afterText;
+    });
+
+    // Now process the text with markdown (placeholders remain intact)
+    const markdownProcessedLines = textWithPlaceholders.split('\n').map(line => {
+      // Handle headers
+      if (line.startsWith('# ')) {
+        return `<h1 class="text-2xl font-bold mb-4">${line.slice(2)}</h1>`;
+      } else if (line.startsWith('## ')) {
+        return `<h2 class="text-xl font-semibold mb-3">${line.slice(3)}</h2>`;
+      } else if (line.startsWith('### ')) {
+        return `<h3 class="text-lg font-medium mb-2">${line.slice(4)}</h3>`;
+      }
+      
+      // Handle bold text (but avoid placeholders)
+      line = line.replace(/\*\*((?!__HIGHLIGHT_).*?)\*\*/g, '<strong class="font-semibold">$1</strong>');
+      
+      // Handle italic text (but avoid placeholders)
+      line = line.replace(/\*((?!__HIGHLIGHT_).*?)\*/g, '<em class="italic">$1</em>');
+      
+      // Return paragraph or empty line
+      if (line.trim() === '') {
+        return '<br>';
+      } else {
+        return `<p class="mb-2">${line}</p>`;
+      }
+    });
+    
+    let processedContract = markdownProcessedLines.join('');
+
+    // Finally, replace all placeholders with actual highlight elements
+    placeholderMap.forEach((markElement, placeholderId) => {
+      processedContract = processedContract.replace(placeholderId, markElement);
     });
 
     return processedContract;

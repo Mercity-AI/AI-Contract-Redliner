@@ -23,6 +23,13 @@ interface ContractData {
   originalContract: string;
   preferences: string;
   issues: RedlineIssue[];
+  summary?: {
+    total_issues: number;
+    high_severity_issues: number;
+    medium_severity_issues: number;
+    low_severity_issues: number;
+    average_severity: number;
+  };
 }
 
 const ContractResults = () => {
