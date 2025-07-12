@@ -37,7 +37,7 @@ class RedlineResponse(BaseModel):
     summary: Dict[str, Any] = Field(..., description="Summary statistics of the analysis")
 
 
-@app.post("/redline", response_model=RedlineResponse)
+@app.post("/redline_mock", response_model=RedlineResponse)
 async def redline_mock(request: RedlineRequest):
     """
     Analyze a contract against user preferences and return identified issues.
@@ -141,7 +141,7 @@ async def redline_mock(request: RedlineRequest):
 
 
 
-@app.post("/redline_", response_model=RedlineResponse)
+@app.post("/redline", response_model=RedlineResponse)
 async def redline_contract(request: RedlineRequest):
     """
     Analyze a contract against user preferences and return identified issues.

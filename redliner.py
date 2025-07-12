@@ -3,9 +3,12 @@ from utils import call_model
 from PROMPTS import SYSTEM_PROMPT, USER_PROMPT
 from rich import print
 
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
-MODEL = "deepseek/deepseek-r1-0528"
+MODEL = os.getenv("MODEL")
 
 
 
