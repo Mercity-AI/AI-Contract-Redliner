@@ -1,28 +1,28 @@
-# Contract Redliner - Next.js App
+# 📄 Contract Redliner - Next.js App
 
 A Next.js application for AI-powered contract redlining that analyzes contracts against user preferences. This application provides an intuitive web interface for the Contract Redliner API, allowing users to upload contracts, specify their preferences, and receive detailed AI-powered analysis with highlighted issues and suggested fixes.
 
-## Features
+## ✨ Features
 
-- **AI-Powered Analysis**: Uses OpenAI/OpenRouter for intelligent contract analysis with support for multiple models including Claude 3.5 Sonnet and DeepSeek R1
-- **Interactive UI**: Real-time highlighting and sidebar for issue management with color-coded severity levels
-- **Modern Stack**: Next.js 14, React 19, TypeScript, Tailwind CSS, shadcn/ui components
-- **Built-in API**: Next.js API routes replace the external FastAPI backend for seamless integration
-- **Responsive Design**: Mobile-friendly interface with dark/light theme support
-- **Type Safety**: Full TypeScript integration with Zod validation
-- **Form Handling**: React Hook Form with proper validation and error handling
-- **State Management**: TanStack Query for efficient API state management
-- **Accessibility**: WCAG compliant components from Radix UI
+- **🤖 AI-Powered Analysis**: Uses OpenAI/OpenRouter for intelligent contract analysis with support for multiple models including Claude 3.5 Sonnet and DeepSeek R1
+- **🖱️ Interactive UI**: Real-time highlighting and sidebar for issue management with color-coded severity levels
+- **⚡ Modern Stack**: Next.js 14, React 19, TypeScript, Tailwind CSS, shadcn/ui components
+- **🔗 Built-in API**: Next.js API routes replace the external FastAPI backend for seamless integration
+- **📱 Responsive Design**: Mobile-friendly interface with dark/light theme support
+- **🛡️ Type Safety**: Full TypeScript integration with Zod validation
+- **📝 Form Handling**: React Hook Form with proper validation and error handling
+- **📊 State Management**: TanStack Query for efficient API state management
+- **♿ Accessibility**: WCAG compliant components from Radix UI
 
-## Getting Started
+## 🚀 Getting Started
 
-### Prerequisites
+### 📋 Prerequisites
 
 - Node.js 18.0 or later
 - npm or yarn package manager
 - OpenRouter API key (or OpenAI API key)
 
-### 1. Install Dependencies
+### 1️⃣ Install Dependencies
 
 In the `nextjs-app/` directory:
 
@@ -152,4 +152,4 @@ npm run start  # start production server
 npm run lint   # lint
 ```
 
-## Built and maintained by Mercity AI
+## Built and maintained by [Mercity AI](https://mercity.ai)
