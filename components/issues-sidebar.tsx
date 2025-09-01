@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Check, X, ChevronRight, ChevronLeft, AlertTriangle, Info, AlertCircle, Zap, XCircle } from 'lucide-react';
-import { RedlineIssue } from '@/pages/ContractResults';
+import { RedlineIssue } from '@/app/results/page';
 
 export interface IssuesSidebarRef {
   scrollToIssue: (issueIndex: number) => void;
@@ -96,7 +96,7 @@ export const IssuesSidebar = forwardRef<IssuesSidebarRef, IssuesSidebarProps>(({
   return (
     <div 
       className={`
-        fixed right-0 top-0 h-screen bg-background border-l transition-all duration-300 z-50
+        fixed right-0 top-[135px] h-[calc(100vh-135px)] bg-background border-l transition-all duration-300 z-50
         ${isCollapsed ? 'w-12' : 'w-96'}
       `}
     >
@@ -113,7 +113,7 @@ export const IssuesSidebar = forwardRef<IssuesSidebarRef, IssuesSidebarProps>(({
       {!isCollapsed && (
         <div className="h-full flex flex-col">
           <Card className="border-0 rounded-none h-full flex flex-col">
-            <CardHeader className="pb-3 flex-shrink-0">
+            <CardHeader className="pt-4 pb-3 flex-shrink-0">
               <CardTitle className="text-lg">Contract Issues</CardTitle>
               <div className="flex gap-2 text-sm">
                 <Badge variant="outline" className="text-xs">
@@ -130,7 +130,7 @@ export const IssuesSidebar = forwardRef<IssuesSidebarRef, IssuesSidebarProps>(({
             
             <CardContent className="p-0 flex-1 min-h-0">
               <ScrollArea ref={scrollAreaRef} className="h-full">
-                <div className="space-y-3 p-4">
+                <div className="space-y-3 p-4 pb-8">
                   {issues.map((issue, index) => (
                     <div
                       key={index}
