@@ -63,7 +63,7 @@ export async function redline(preferences: string, contract: string) {
 
   const openaiClient = getClient();
   const response = await openaiClient.chat.completions.create({
-    model: process.env.MODEL || 'anthropic/claude-3.5-sonnet',
+    model: process.env.MODEL || 'anthropic/claude-sonnet-4',
     messages,
     temperature: 0.0,
   });

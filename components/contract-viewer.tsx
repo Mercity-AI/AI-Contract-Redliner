@@ -199,6 +199,11 @@ export const ContractViewer = forwardRef<ContractViewerRef, ContractViewerProps>
         }
       }
       
+      // If the issue is accepted, replace the original text with the suggested replacement
+      if (isAccepted && highlight.issue.replace_with) {
+        displayText = highlight.issue.replace_with;
+      }
+      
       // Create unique placeholder
       const placeholderId = `__HIGHLIGHT_${highlight.issueIndex}__`;
       
